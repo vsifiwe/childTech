@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import (AppointmentDetail, AppointmentView, CourseDetail, CourseList, EnrollDetail, EnrollView, EventDetail, EventView, LessonDetail, LessonView, ProgramList, ProgramView,
+from .views import (AppointmentDetail, AppointmentView, CourseDetail, CourseList, EnrollDetail, EnrollList, EnrollView, EventDetail, EventView, LearnView, LessonDetail, LessonView, ProgramList, ProgramView,
                     RegisterAPI, UsersList, UserView)
 
 
@@ -12,9 +12,11 @@ urlpatterns = [
     path('programs/<int:pk>/', ProgramView.as_view(), name='program-detail'),
     path('courses/', CourseList.as_view(), name='courses'),
     path('courses/<int:pk>/', CourseDetail.as_view(), name='course-detail'),
+    path('courses/<int:pk>/learn', LearnView, name='course-learn'),
+    path('courses/<int:pk>/enroll', EnrollView, name='enroll'),
     path('lesson/', LessonView.as_view(), name='lessons'),
     path('lesson/<int:pk>/', LessonDetail.as_view(), name='lesson-detail'),
-    path('enroll/', EnrollView.as_view(), name='enroll'),
+    path('enroll/all', EnrollList.as_view(), name='enroll-list'),
     path('enroll/<int:pk>/', EnrollDetail.as_view(), name='enroll-detail'),
     path('appointment/', AppointmentView.as_view(), name='appointments'),
     path('appointment/<int:pk>/', AppointmentDetail.as_view(), name='app-detail'),
