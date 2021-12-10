@@ -1,7 +1,8 @@
 from django.db.models import fields
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import (Appointment, Course, Enroll, Event, Lesson, Program)
+from .models import (ParentAppointment, SchoolAppointment,
+                     Course, Enroll, Event, Lesson, Program)
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
@@ -74,9 +75,15 @@ class EnrollSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class AppointmentSerializer(serializers.ModelSerializer):
+class ParentAppointmentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Appointment
+        model = ParentAppointment
+        fields = '__all__'
+
+
+class SchoolAppointmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SchoolAppointment
         fields = '__all__'
 
 

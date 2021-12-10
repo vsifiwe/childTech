@@ -54,18 +54,49 @@ class Enroll(models.Model):
         return self.user.username + ' in ' + self.course.name
 
 
-class Appointment(models.Model):
+# class Appointment(models.Model):
+#     program = models.ForeignKey(Program, on_delete=CASCADE)
+#     first_name = models.CharField(max_length=50)
+#     last_name = models.CharField(max_length=50)
+#     telephone = models.CharField(max_length=13)
+#     email = models.EmailField(max_length=254)
+#     address = models.CharField(max_length=255)
+#     desired_time = models.DateTimeField()
+#     number_of_people = models.IntegerField()
+
+#     def __str__(self):
+#         return self.first_name + ' => ' + self.program.title
+
+
+class SchoolAppointment(models.Model):
+
     program = models.ForeignKey(Program, on_delete=CASCADE)
+    course = models.ForeignKey(Course, on_delete=CASCADE)
+    head_name = models.CharField(max_length=50)
+    school_name = models.CharField(max_length=50)
+    number_of_people = models.IntegerField()
+    telephone = models.CharField(max_length=13)
+    address = models.CharField(max_length=255)
+    desired_time = models.DateTimeField()
+
+    def __str__(self):
+        return self.school_name + ' => ' + self.course.name
+
+
+class ParentAppointment(models.Model):
+    program = models.ForeignKey(Program, on_delete=CASCADE)
+    course = models.ForeignKey(Course, on_delete=CASCADE)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     telephone = models.CharField(max_length=13)
     email = models.EmailField(max_length=254)
     address = models.CharField(max_length=255)
     desired_time = models.DateTimeField()
-    number_of_people = models.IntegerField()
+    child_name = models.CharField(max_length=50)
+    child_dob = models.DateTimeField()
 
     def __str__(self):
-        return self.first_name + ' => ' + self.program.title
+        return self.first_name + ' in ' + self.course.name
 
 
 class Event(models.Model):

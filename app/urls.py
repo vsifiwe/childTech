@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import (AppointmentDetail, AppointmentView, CourseDetail, CourseList, EnrollDetail, EnrollList, EnrollView, EventDetail, EventView, LearnView, LessonDetail, LessonView, PaidView, ProgramList, ProgramView,
+from .views import (ParentAppointmentCreate, ParentAppointmentView, ParentAppointmentDetail, SchoolAppointmentCreate, SchoolAppointmentDetail, SchoolAppointmentView, CourseDetail, CourseList, EnrollDetail, EnrollList, EnrollView, EventDetail, EventView, LearnView, LessonDetail, LessonView, PaidView, ProgramList, ProgramView,
                     RegisterAPI, UsersList, UserView)
 
 
@@ -19,8 +19,18 @@ urlpatterns = [
     path('lesson/<int:pk>/', LessonDetail.as_view(), name='lesson-detail'),
     path('enroll/all', EnrollList.as_view(), name='enroll-list'),
     path('enroll/<int:pk>/', EnrollDetail.as_view(), name='enroll-detail'),
-    path('appointment/', AppointmentView.as_view(), name='appointments'),
-    path('appointment/<int:pk>/', AppointmentDetail.as_view(), name='app-detail'),
+    # path('appointment/', AppointmentView.as_view(), name='appointments'),
+    # path('appointment/<int:pk>/', AppointmentDetail.as_view(), name='app-detail'),
+    path('appointment/parent', ParentAppointmentView.as_view(), name='parent-list'),
+    path('appointment/parent/create',
+         ParentAppointmentCreate.as_view(), name='parent-create'),
+    path('appointment/parent/<int:pk>/',
+         ParentAppointmentDetail.as_view(), name='parent-detail'),
+    path('appointment/school/', SchoolAppointmentView.as_view(), name='school-list'),
+    path('appointment/school/create',
+         SchoolAppointmentCreate.as_view(), name='school-create'),
+    path('appointment/school/<int:pk>/',
+         SchoolAppointmentDetail.as_view(), name='school-detail'),
     path('events/', EventView.as_view(), name='events'),
     path('events/<int:pk>/', EventDetail.as_view(), name='event-detail'),
 ]
