@@ -59,7 +59,8 @@ class ProgramView(generics.RetrieveUpdateDestroyAPIView):
 class CourseList(generics.ListCreateAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
-    permission_classes = [IsAdminUser | ReadOnly]
+    # permission_classes = [IsAdminUser | ReadOnly]
+    permission_classes = [IsAuthenticated]
 
 
 class CourseDetail(APIView):
