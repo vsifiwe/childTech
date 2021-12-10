@@ -11,7 +11,7 @@ class Program(models.Model):
     language = models.CharField(max_length=30)
     mode = models.CharField(max_length=30)
     img = models.FileField(
-        upload_to='static', default='../static/app/program-default.png')
+        upload_to='app', default='../media/app/program-default.png')
 
     def __str__(self):
         return self.title
@@ -26,7 +26,7 @@ class Course(models.Model):
     price = models.IntegerField()
     description = models.CharField(max_length=255)
     img = models.FileField(
-        upload_to='static', default='../static/app/course-default.png')
+        upload_to='app', default='../media/app/course-default.png')
     creator = models.ForeignKey(User, on_delete=CASCADE)
 
     def __str__(self):

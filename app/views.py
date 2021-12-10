@@ -59,8 +59,7 @@ class ProgramView(generics.RetrieveUpdateDestroyAPIView):
 class CourseList(generics.ListCreateAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
-    # permission_classes = [IsAdminUser | ReadOnly]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminUser | ReadOnly]
 
 
 class CourseDetail(APIView):
@@ -645,3 +644,27 @@ def LearnView(request, pk):
         return Response({"message": clean_lessons})
     except Enroll.DoesNotExist:
         return Response({"message": "not enrolled"}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+@api_view(('GET',))
+@permission_classes([IsAuthenticated])
+def PaidView(request):
+    JWT_authenticator = JWTAuthentication()
+    response = JWT_authenticator.authenticate(request)
+    user, token = response
+
+    try:
+        enrolls = Enroll.objects.filter(user=token.payload['user_id'])
+        enrollments = EnrollSerializer(enrolls, many=True).data
+        courses = []
+        for e in enrollments:
+            c = Course.objects.get(id=e['course'])
+            course = CourseSerializer(c).data
+            courses.append(course)
+
+        if not courses:
+            return Response({"message": "You are not enrolled in any lesson"})
+
+        return Response({"courses": courses})
+    except Enroll.DoesNotExist:
+        return Response({"message": "You are not enrolled in any lesson."})
