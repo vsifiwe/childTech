@@ -1,3 +1,4 @@
+from django.db.models import manager
 from rest_framework import generics, status
 from rest_framework.response import Response
 from .serializers import (
@@ -11,10 +12,9 @@ from rest_framework.views import APIView
 from django.http import Http404
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import MyTokenObtainPairSerializer
+from .email import contactMail, enrollMail, registrationMail
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
@@ -28,6 +28,7 @@ class RegisterAPI(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
+        registrationMail(serializer.validated_data['email'])
 
         return Response({
             "user": UsersSerializer(user, context=self.get_serializer_context()).data,
@@ -122,7 +123,7 @@ def EnrollView(request, pk):
     user, token = response
     course = Course.objects.get(id=pk)
     course_data = CourseSerializer(course).data
-    print(course_data)
+    # print(course_data['name'])
     try:
         Enroll.objects.get(course=pk, user=token.payload['user_id'])
         return Response({"message": "You are already enrolled in this course"}, status=status.HTTP_400_BAD_REQUEST)
@@ -134,6 +135,7 @@ def EnrollView(request, pk):
         serializer = EnrollSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
+            enrollMail(token.payload['email'], course_data['name'])
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -238,3 +240,31 @@ def PaidView(request):
         return Response({"courses": courses})
     except Enroll.DoesNotExist:
         return Response({"message": "You are not enrolled in any lesson."})
+
+
+@api_view(('POST',))
+def ContactView(request):
+    name = request.data['name']
+    phone = request.data['phone']
+    subject = request.data['subject']
+    message = request.data['message']
+    print(request.data)
+
+    contactMail(name, phone, subject, message)
+
+    return Response({'message': 'We have received your query. Thank you'})
+
+
+@api_view(('GET',))
+def dataView(request):
+    courses = Course.objects.count()
+    enrolls = Enroll.objects.count()
+    parents = ParentAppointment.objects.count()
+    schools = SchoolAppointment.objects.count()
+    apps = parents + schools
+
+    return Response({
+        'courses': courses,
+        'enrolls': enrolls,
+        'appointments': apps
+    })
