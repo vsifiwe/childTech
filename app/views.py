@@ -158,12 +158,6 @@ class ParentAppointmentCreate(generics.CreateAPIView):
     # permission_classes = [IsAuthenticated]
 
 
-class ParentAppointmentView(generics.ListAPIView):
-    queryset = ParentAppointment.objects.all()
-    serializer_class = ParentAppointmentSerializer
-    permission_classes = [IsAdminUser]
-
-
 class ParentAppointmentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = ParentAppointment.objects.all()
     serializer_class = ParentAppointmentSerializer
@@ -174,12 +168,6 @@ class SchoolAppointmentCreate(generics.CreateAPIView):
     queryset = SchoolAppointment.objects.all()
     serializer_class = SchoolAppointmentSerializer
     # permission_classes = [IsAuthenticated]
-
-
-class SchoolAppointmentView(generics.ListAPIView):
-    queryset = SchoolAppointment.objects.all()
-    serializer_class = SchoolAppointmentSerializer
-    permission_classes = [IsAdminUser]
 
 
 class SchoolAppointmentDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -268,3 +256,30 @@ def dataView(request):
         'enrolls': enrolls,
         'appointments': apps
     })
+
+
+@api_view(('GET',))
+@permission_classes([IsAdminUser])
+def AppointmentView(request):
+    parents = ParentAppointment.objects.all()
+    schools = SchoolAppointment.objects.all()
+
+    clean_parents = ParentAppointmentSerializer(parents, many=True).data
+    clean_schools = SchoolAppointmentSerializer(schools, many=True).data
+
+    data = []
+
+    for p in clean_parents:
+        data.append(p)
+
+    for s in clean_schools:
+        data.append(s)
+
+    return Response({'data': data})
+
+
+@api_view(['POST'])
+def Payment_response(request):
+    print(request.body)
+
+    return Response({'message': 'success'}, status=status.HTTP_200_OK)

@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import (ContactView, ParentAppointmentCreate, ParentAppointmentView, ParentAppointmentDetail, SchoolAppointmentCreate, SchoolAppointmentDetail, SchoolAppointmentView, CourseDetail, CourseList, EnrollDetail, EnrollList, EnrollView, EventDetail, EventView, LearnView, LessonDetail, LessonView, PaidView, ProgramList, ProgramView,
-                    RegisterAPI, UsersList, UserView, dataView)
+from .views import (AppointmentView, ContactView, ParentAppointmentCreate, ParentAppointmentDetail, SchoolAppointmentCreate, SchoolAppointmentDetail, CourseDetail, CourseList, EnrollDetail, EnrollList, EnrollView, EventDetail, EventView, LearnView, LessonDetail, LessonView, PaidView, ProgramList, ProgramView,
+                    RegisterAPI, UsersList, UserView, dataView, Payment_response)
 
 
 # app_name = 'app'
@@ -19,12 +19,12 @@ urlpatterns = [
     path('lesson/<int:pk>/', LessonDetail.as_view(), name='lesson-detail'),
     path('enroll/all', EnrollList.as_view(), name='enroll-list'),
     path('enroll/<int:pk>/', EnrollDetail.as_view(), name='enroll-detail'),
-    path('appointment/parent', ParentAppointmentView.as_view(), name='parent-list'),
+    #     path('appointment/parent', ParentAppointmentView.as_view(), name='parent-list'),
     path('appointment/parent/create',
          ParentAppointmentCreate.as_view(), name='parent-create'),
     path('appointment/parent/<int:pk>/',
          ParentAppointmentDetail.as_view(), name='parent-detail'),
-    path('appointment/school/', SchoolAppointmentView.as_view(), name='school-list'),
+    #     path('appointment/school/', SchoolAppointmentView.as_view(), name='school-list'),
     path('appointment/school/create',
          SchoolAppointmentCreate.as_view(), name='school-create'),
     path('appointment/school/<int:pk>/',
@@ -32,5 +32,7 @@ urlpatterns = [
     path('events/', EventView.as_view(), name='events'),
     path('events/<int:pk>/', EventDetail.as_view(), name='event-detail'),
     path('contact/', ContactView, name='contact-us'),
-    path('data/', dataView, name='data')
+    path('data/', dataView, name='data'),
+    path('appointment/', AppointmentView, name='app-list'),
+    path('callback/', Payment_response, name='callback')
 ]

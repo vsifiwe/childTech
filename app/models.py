@@ -49,6 +49,7 @@ class Enroll(models.Model):
     course = models.ForeignKey(Course, on_delete=CASCADE)
     user = models.ForeignKey(User, on_delete=CASCADE)
     joined_at = models.DateTimeField(auto_now_add=True)
+    paid = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.username + ' in ' + self.course.name
