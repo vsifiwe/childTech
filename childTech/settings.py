@@ -81,6 +81,8 @@ WSGI_APPLICATION = 'childTech.wsgi.application'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    'https://childtech.klabstartupsacademy.rw',
+    'https://www.childtech.klabstartupsacademy.rw'
 ]
 
 # Database
