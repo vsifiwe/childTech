@@ -15,6 +15,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import MyTokenObtainPairSerializer
 from .email import contactMail, enrollMail, registrationMail
+import json
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
@@ -280,6 +281,25 @@ def AppointmentView(request):
 
 @api_view(['POST'])
 def Payment_response(request):
-    print(request.body)
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    tx_ref = body['data']['tx_ref']
 
-    return Response({'message': 'success'}, status=status.HTTP_200_OK)
+    tx_ref_content = tx_ref.split("-")
+    user_id = tx_ref_content[0]
+    course_id = tx_ref_content[1]
+
+    try:
+        Enroll.objects.get(course=course_id, user=user_id)
+        return Response({"message": "You are already enrolled in this course"}, status=status.HTTP_400_BAD_REQUEST)
+    except Enroll.DoesNotExist:
+        data = {
+            'course': course_id,
+            'user': user_id
+        }
+        serializer = EnrollSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            # enrollMail(token.payload['email'], course_data['name'])
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
