@@ -75,10 +75,12 @@ class SchoolAppointment(models.Model):
     course = models.ForeignKey(Course, on_delete=CASCADE)
     head_name = models.CharField(max_length=50)
     school_name = models.CharField(max_length=50)
+    email = models.EmailField(max_length=254)
     number_of_people = models.IntegerField()
     telephone = models.CharField(max_length=13)
     address = models.CharField(max_length=255)
     desired_time = models.DateTimeField()
+    intake = models.CharField(max_length=254, null=True, blank=True)
 
     def __str__(self):
         return self.school_name + ' => ' + self.course.name
@@ -87,8 +89,10 @@ class SchoolAppointment(models.Model):
 class ParentAppointment(models.Model):
     program = models.ForeignKey(Program, on_delete=CASCADE)
     course = models.ForeignKey(Course, on_delete=CASCADE)
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
+    parent_name = models.CharField(max_length=50)
+    parent_id = models.CharField(max_length=20)
+    intake = models.CharField(max_length=254, null=True, blank=True)
+    # last_name = models.CharField(max_length=50)
     telephone = models.CharField(max_length=13)
     email = models.EmailField(max_length=254)
     address = models.CharField(max_length=255)
@@ -97,7 +101,7 @@ class ParentAppointment(models.Model):
     child_dob = models.DateTimeField()
 
     def __str__(self):
-        return self.first_name + ' in ' + self.course.name
+        return self.parent_name + ' in ' + self.course.name
 
 
 class Event(models.Model):
