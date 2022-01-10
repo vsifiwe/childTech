@@ -224,11 +224,11 @@ def PaidView(request):
             courses.append(course)
 
         if not courses:
-            return Response({"message": "You are not enrolled in any lesson"})
+            return Response({"courses": []})
 
         return Response({"courses": courses})
     except Enroll.DoesNotExist:
-        return Response({"message": "You are not enrolled in any lesson."})
+        return Response({"courses": []})
 
 
 @api_view(('POST',))
