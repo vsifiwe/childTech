@@ -29,7 +29,7 @@ class RegisterAPI(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-        registrationMail(serializer.validated_data['email'])
+        # registrationMail(serializer.validated_data['email'])
 
         return Response({
             "user": UsersSerializer(user, context=self.get_serializer_context()).data,
